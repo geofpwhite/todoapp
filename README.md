@@ -1,0 +1,1 @@
+Simple local todo app that stores tasks in json files. Did this to help get acquainted with gomponents 
