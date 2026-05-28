@@ -1,12 +1,11 @@
 package records
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"sync"
-
-	"github.com/goccy/go-json"
 )
 
 type Record struct {
@@ -74,11 +73,10 @@ func (rh *RecordHandler) AddRecord(task string) {
 		panic("ahh")
 	}
 
-	err = os.WriteFile("num_records.txt", []byte(strconv.Itoa(record.RecordID+1)), 0644)
+	err = os.WriteFile("num_records.txt", []byte(strconv.Itoa(record.RecordID+1)), 0o644)
 	if err != nil {
 		panic("ahh")
 	}
-
 }
 
 func (rh *RecordHandler) MarkRecordAsCompleted(recordID int) {
@@ -131,7 +129,7 @@ func (rh *RecordHandler) MarkRecordAsCompleted(recordID int) {
 	if err != nil {
 		panic("ahh")
 	}
-	os.WriteFile("active_records.json", b, 0644)
+	os.WriteFile("active_records.json", b, 0o644)
 }
 
 func (rh *RecordHandler) GetActiveRecords() []Record {

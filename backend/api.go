@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	os.Chdir("C:/Users/geoffrey/projects/todoapp/backend")
 	mux := http.NewServeMux()
 
 	rh := records.NewRecordHandler()
@@ -45,15 +44,19 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	mux.HandleFunc("/completed", func(w http.ResponseWriter, r *http.Request) {
-		gom.Completed(w, rh)
+		http.Redirect(w, r, "/?tab=completed", http.StatusFound)
 	})
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("backend/static"))))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	// Start the server
-	fmt.Println("Starting server at :8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
-	err := http.ListenAndServe(":8080", mux)
+	fmt.Printf("Starting server at :%s\n", port)
+
+	err := http.ListenAndServe(":"+port, mux)
 	if err != nil {
 		fmt.Println("Error starting server:", err)
 		return
